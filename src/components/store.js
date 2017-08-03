@@ -16,13 +16,13 @@ let filterReducer = (state = {}, action) => {
     switch(action.type){
         case 'FILTER_ACTIVE':
         $.map(state, (user) => {
-            
+
         });
     }
-}  
+}
 
 const middleware = applyMiddleware(logger);
 
-let store = createStore(userReducer, initialUsers, middleware);
+let store = createStore(userReducer, {}, middleware);
 
 export default store;

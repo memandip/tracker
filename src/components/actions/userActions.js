@@ -1,13 +1,13 @@
-import { 
-    FETCH_USER, 
-    ADD_USER, 
-    UPDATE_USER, 
+import {
+    FETCH_USER,
+    ADD_USER,
+    UPDATE_USER,
     DELETE_USER,
-    SHOW_ALL 
+    SHOW_ALL
 } from '../constants';
 
-export function fetchUser(users){
-    return {type:FETCH_USER, users};
+export function fetchUser(){
+    return {type:FETCH_USER};
 }
 
 export function addUser(data){

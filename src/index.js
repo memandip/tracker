@@ -6,19 +6,19 @@ import registerServiceWorker from './registerServiceWorker';
 import { Provider } from 'react-redux';
 import trackerApp from './components/actions/reducers';
 import store from './components/store';
-import { deleteUser } from './components/actions/userActions.js';
+import { deleteUser, addUser } from './components/actions/userActions.js';
 
 
 ReactDOM.render(
-    <Provider store={store}>        
+    <Provider store={store}>
         <App />
     </Provider>
 , document.getElementById('root'));
 registerServiceWorker();
 
-// store.subscribe( () => {
-//     console.log(store.getState())
-// });
+store.subscribe( () => {
+    console.log(store.getState())
+});
 
 // let user = {
 //     name:'Sanjay Khadka',

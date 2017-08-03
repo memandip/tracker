@@ -2,24 +2,30 @@ import React, { Component } from 'react';
 import $ from 'jquery';
 import { connect } from 'react-redux';
 import store from './components/store';
+import { connet, bindActionCreators } from 'redux';
+import { FETCH_USER } from './components/constants';
+import { fetchUser } from './components/actions/userActions';
+import firebase from './components/firebase.config';
 
-export class Sidebar extends React.Component{
+class Sidebar extends React.Component{
 
     constructor(){
         super();
         this.state = {
             users: []
         }
-        connect( (store) => {
-            console.log('store');
-            return { user: store.user }
-        });
     }
 
     componentDidMount(){
-        let users = this.props.users;
-        this.setState({users:users});
-        // console.log(this.props.users);
+        // let users = this.props.users;
+        // this.setState({users:users});
+        // console.log('Sidebar props: ',this.props);
+        let self = this;
+        let userDb = firebase.database().ref().child('users');
+        userDb.on('value', function(snap){
+            self.setState({users:snap.val()});
+            console.log(snap.val());
+        });
     }
 
     render(){
@@ -40,7 +46,7 @@ export class Sidebar extends React.Component{
                     <li className="header">MAIN NAVIGATION</li>
                     <li className="treeview">
                         <a href="#">
-                            <i className="fa fa-dashboard"></i> 
+                            <i className="fa fa-dashboard"></i>
                             <span>Dashboard</span>
                             <span className="pull-right-container">
                             <i className="fa fa-angle-left pull-right"></i>
@@ -49,19 +55,19 @@ export class Sidebar extends React.Component{
                         <ul className="treeview-menu">
                             <li>
                                 <a href="index.html">
-                                    <i className="fa fa-circle-o"></i> 
+                                    <i className="fa fa-circle-o"></i>
                                     Dashboard v1</a>
                             </li>
                             <li>
                                 <a href="index2.html">
-                                    <i className="fa fa-circle-o"></i> 
+                                    <i className="fa fa-circle-o"></i>
                                     Dashboard v2</a>
                             </li>
                         </ul>
                     </li>
                     <li className="treeview">
                         <a href="#">
-                            <i className="fa fa-users"></i> 
+                            <i className="fa fa-users"></i>
                             <span>Users</span>
                             <span className="pull-right-container">
                             <i className="fa fa-angle-left pull-right"></i>
@@ -77,3 +83,11 @@ export class Sidebar extends React.Component{
         );
     }
 }
+
+// function mapStateToProps(state){
+//     return {users: state.users}
+// }
+
+// export default connect(mapStateToProps)(Sidebar);
+
+export default Sidebar;

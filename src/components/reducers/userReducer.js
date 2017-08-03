@@ -1,10 +1,10 @@
 import firebase from '../firebase.config';
-import { 
-    FETCH_USER, 
-    ADD_USER, 
-    UPDATE_USER, 
+import {
+    FETCH_USER,
+    ADD_USER,
+    UPDATE_USER,
     DELETE_USER,
-    SHOW_ALL 
+    SHOW_ALL
 } from  '../constants.js';
 
 let userDb = firebase.database().ref().child('users');
@@ -22,7 +22,7 @@ const userReducer = (state = {}, action) => {
             return state = {...state, user:action.payload}
         case DELETE_USER:
             userDb.child(action.id).remove();
-            return state = {...state, user:action.payload}                        
+            return state = {...state, user:action.payload}
         default:
             return state;
     }

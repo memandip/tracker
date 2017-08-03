@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Header } from './header.js';
-import { Sidebar } from './sidebar.js';
+import  Sidebar  from './sidebar.js';
 import { Content } from './content.js';
 import  * as firebase  from 'firebase';
 
@@ -23,7 +23,7 @@ export default class App extends Component{
         // firebase.auth().onAuthStateChanged( (user) => {
         //     if(user){
         //     }   else    {
-        //         // window.location.href='/login';                
+        //         // window.location.href='/login';
         //     }
         // });
         console.log(this.props);
@@ -35,9 +35,9 @@ export default class App extends Component{
         return (
             <div>
                 <Header />
-                <Sidebar users = {this.state.users}/>
-                <Content users = {this.state.users} />
-            </div>      
+                <Sidebar/>
+                <Content />
+            </div>
         );
     }
 
