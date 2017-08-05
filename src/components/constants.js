@@ -1,3 +1,6 @@
+export const ACTIVE_ADMIN = 'ACTIVE_ADMIN';
+export const ACTIVE_USER = 'ACTIVE_USER';
+export const FETCH_USERS = 'FETCH_USERS';
 export const FETCH_USER = 'FETCH_USER';
 export const ADD_USER = 'ADD_USER';
 export const UPDATE_USER = 'UPDATE_USER';

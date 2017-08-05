@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 import { connect } from 'react-redux';
-import store from './components/store';
-import { connet, bindActionCreators } from 'redux';
-import { FETCH_USER } from './components/constants';
-import { fetchUser } from './components/actions/userActions';
+import { bindActionCreators } from 'redux';
+import {Link} from 'react-router-dom';
+import { fetchUsers, activeUser } from './components/actions/userActions';
 import firebase from './components/firebase.config';
 
-class Sidebar extends React.Component{
+class Sidebar extends Component{
 
     constructor(){
         super();
@@ -17,25 +16,26 @@ class Sidebar extends React.Component{
     }
 
     componentDidMount(){
-        // let users = this.props.users;
-        // this.setState({users:users});
-        // console.log('Sidebar props: ',this.props);
         let self = this;
         let userDb = firebase.database().ref().child('users');
         userDb.on('value', function(snap){
-            self.setState({users:snap.val()});
-            console.log(snap.val());
+            self.props.fetchUsers(snap.val());
+            self.setState({users:self.props.users});
         });
     }
 
     render(){
-        let users = $.map(this.state.users, function(user, index){
+        let self = this;
+        let users = $.map(self.state.users, function(user, index){
+            let icon = <i className="fa fa-dot-circle-o" aria-hidden="true"></i>;
+            if(user.connection === true){
+                icon = <i className="fa fa-dot-circle-o" aria-hidden="true" style={{color:'green'}}></i>;
+            }
             return (
-                <li>
-                    <a href={"user/"+index}>
-                        <i className="fa fa-user"></i> &nbsp;
-                        {user.name}
-                    </a>
+                <li key={index}>
+                    <Link to={"/user/"+index} onClick={() => self.props.activeUser(user)}>
+                        {icon}&nbsp;{user.name}
+                    </Link>
                 </li>
             );
         });
@@ -44,26 +44,11 @@ class Sidebar extends React.Component{
                 <section className="sidebar">
                 <ul className="sidebar-menu tree" data-widget="tree">
                     <li className="header">MAIN NAVIGATION</li>
-                    <li className="treeview">
-                        <a href="#">
+                    <li>
+                        <Link to="/" >
                             <i className="fa fa-dashboard"></i>
                             <span>Dashboard</span>
-                            <span className="pull-right-container">
-                            <i className="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul className="treeview-menu">
-                            <li>
-                                <a href="index.html">
-                                    <i className="fa fa-circle-o"></i>
-                                    Dashboard v1</a>
-                            </li>
-                            <li>
-                                <a href="index2.html">
-                                    <i className="fa fa-circle-o"></i>
-                                    Dashboard v2</a>
-                            </li>
-                        </ul>
+                        </Link>
                     </li>
                     <li className="treeview">
                         <a href="#">
@@ -84,10 +69,15 @@ class Sidebar extends React.Component{
     }
 }
 
-// function mapStateToProps(state){
-//     return {users: state.users}
-// }
+function mapStateToProps(state){
+    return {users: state.users, activeUser: state.activeUser}
+}
 
-// export default connect(mapStateToProps)(Sidebar);
+function matchDispatchToProps(dispatch){
+    return bindActionCreators({
+        fetchUsers: fetchUsers,
+        activeUser: activeUser
+    }, dispatch);
+}
 
-export default Sidebar;
+export default connect(mapStateToProps, matchDispatchToProps)(Sidebar);

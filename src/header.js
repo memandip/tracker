@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
+import { connect } from 'react-redux';
 
-export class Header extends Component{
+class Header extends Component{
 
     render(){
         return (
@@ -18,16 +19,16 @@ export class Header extends Component{
                         <ul className="nav navbar-nav">
                             <li className="dropdown user user-menu">
                                 <a href="#" className="dropdown-toggle" data-toggle="dropdown">
-                                <img src="dist/img/user2-160x160.jpg" className="user-image" alt="User Image"/>
+                                <img src="/dist/img/user2-160x160.jpg" className="user-image" alt="User Image"/>
                                 <span className="hidden-xs">Alexander Pierce</span>
                                 </a>
                                 <ul className="dropdown-menu">
                                     <li className="user-header">
-                                        <img src="dist/img/user2-160x160.jpg" className="img-circle" alt="User Image"/>
+                                        <img src="/dist/img/user2-160x160.jpg" className="img-circle" alt="User Image"/>
 
                                         <p> Alexander Pierce - Web Developer</p>
                                     </li>
-                                    
+
                                     <li className="user-footer">
                                         <div className="pull-left">
                                         <a href="#" className="btn btn-default btn-flat">Profile</a>
@@ -46,3 +47,11 @@ export class Header extends Component{
     }
 
 }
+
+function mapStateToProps(state){
+    return {
+        users:state
+    }
+}
+
+export default connect(mapStateToProps)(Header);
