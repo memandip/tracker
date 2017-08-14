@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 class Header extends Component{
 
@@ -26,12 +27,14 @@ class Header extends Component{
                                     <li className="user-header">
                                         <img src="/dist/img/user2-160x160.jpg" className="img-circle" alt="User Image"/>
 
-                                        <p> Alexander Pierce - Web Developer</p>
+                                        <p> {this.props.admin.name} - Admin</p>
                                     </li>
 
                                     <li className="user-footer">
                                         <div className="pull-left">
-                                        <a href="#" className="btn btn-default btn-flat">Profile</a>
+                                        <Link to="/profile" className="btn btn-default btn-flat">
+                                            Profile
+                                        </Link>
                                         </div>
                                         <div className="pull-right">
                                         <a href="#" className="btn btn-default btn-flat">Sign out</a>
@@ -50,7 +53,7 @@ class Header extends Component{
 
 function mapStateToProps(state){
     return {
-        users:state
+        admin:state.activeAdmin
     }
 }
 

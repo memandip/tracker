@@ -33,7 +33,7 @@ class Sidebar extends Component{
             }
             return (
                 <li key={index}>
-                    <Link to={"/user/"+index} onClick={() => self.props.activeUser(user)}>
+                    <Link to={"/user/"+index}>
                         {icon}&nbsp;{user.name}
                     </Link>
                 </li>
@@ -48,6 +48,12 @@ class Sidebar extends Component{
                         <Link to="/" >
                             <i className="fa fa-dashboard"></i>
                             <span>Dashboard</span>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link to="/users">
+                            <i className="fa fa-users"></i>&nbsp;
+                            <span>Users</span>
                         </Link>
                     </li>
                     <li className="treeview">

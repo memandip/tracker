@@ -1,12 +1,21 @@
 import {
+    LOGIN,
+    ACTIVE_ADMIN,
     ACTIVE_USER,
     FETCH_USER,
     FETCH_USERS,
     ADD_USER,
     UPDATE_USER,
-    DELETE_USER,
-    SHOW_ALL
+    DELETE_USER
 } from '../constants';
+
+export function setloggedIn(status){
+    return {type: LOGIN, payload: status};
+}
+
+export function activeAdmin(admin){
+    return {type:ACTIVE_ADMIN, payload:admin};
+}
 
 export function activeUser(user){
     return {type:ACTIVE_USER, payload: user};

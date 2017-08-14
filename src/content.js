@@ -2,22 +2,60 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import firebase from './components/firebase.config';
-import { fetchUser, activeUser } from './components/actions/userActions';
+import { activeUser } from './components/actions/userActions';
 import Maps from './components/googlemaps.config';
 
 class Content extends Component{
 
-    constructor(){
-        super();
-        this.state = {};
+    constructor(props){
+        super(props);
+        this.state = {
+            position:{
+                lat : 27.7089603,
+                lng : 85.3261328
+            },
+            map:null
+        };
+    }
+
+    componentWillMount(){
+        // let id = this.props.match.params.userId;
+        // let userDb = firebase.database().ref().child('users').child(id);
+        // let self = this;
+        // userDb.on('value', function(snap){
+        //     self.props.activeUser(snap.val());
+        // });
     }
 
     componentDidMount(){
         let id = this.props.match.params.userId;
         let userDb = firebase.database().ref().child('users').child(id);
         let self = this;
+        // window.navigator.geolocation.getCurrentPosition(function(position){
+        //     let pos = {lat:position.coords.latitude, lng:position.coords.longitude}
+        //     console.log("Position: ", pos);
+        // });
+
         userDb.on('value', function(snap){
-            self.props.activeUser(snap.val());
+            let user = snap.val();
+            self.props.activeUser(user);
+            let mapEl = document.getElementById('mapLoader');
+            let position = {lat: user.latitude, lng: user.longitude};
+            Maps.load(function(google) {
+                let map = new google.maps.Map(mapEl,{
+                    zoom:10,
+                    center:position
+                });
+                let marker = new google.maps.Marker({
+                    position:position,
+                    map:map,
+                    title:"Position of "+user.name
+                });
+                marker.setPosition(position);
+                marker.setMap(map);
+                map.setCenter(position);
+                self.setState({map:map});
+            });
         });
     }
 
@@ -29,25 +67,25 @@ class Content extends Component{
         }
     }
 
-    updateUserPosition(){
-        let mapEl = document.getElementById('mapLoader');
-        let position = {lat: this.props.user.latitude, lng: this.props.user.longitude};
-        let self = this;
-        Maps.load(function(google) {
-            let map = new google.maps.Map(mapEl,{
-                zoom:10,
-                center:position
-            });
-            let marker = new google.maps.Marker({
-                position:position,
-                map:map,
-                title:"Position of "+self.props.user.name
-            });
-            marker.setPosition(position);
-            marker.setMap(map);
-            map.setCenter(position);
-        });
-    }
+    // updateUserPosition(){
+    //     let mapEl = document.getElementById('mapLoader');
+    //     let position = {lat: this.props.user.latitude, lng: this.props.user.longitude};
+    //     let self = this;
+    //     Maps.load(function(google) {
+    //         let map = new google.maps.Map(mapEl,{
+    //             zoom:10,
+    //             center:position
+    //         });
+    //         let marker = new google.maps.Marker({
+    //             position:position,
+    //             map:map,
+    //             title:"Position of "+self.props.user.name
+    //         });
+    //         marker.setPosition(position);
+    //         marker.setMap(map);
+    //         map.setCenter(position);
+    //     });
+    // }
 
     updateUser(id){
         let userDb = firebase.database().ref().child('users').child(id);
@@ -63,18 +101,17 @@ class Content extends Component{
         let position = {lat: this.props.user.latitude, lng: this.props.user.longitude};
         let self = this;
         Maps.load(function(google) {
-            let map = new google.maps.Map(mapEl,{
-                zoom:10,
-                center:position
-            });
-            let marker = new google.maps.Marker({
-                position:position,
-                map:map,
-                title:"Position of "+self.props.user.name
-            });
-            marker.setPosition(position);
-            marker.setMap(map);
-            map.setCenter(position);
+            if(self.state.map !== null){
+                let map = self.state.map;
+                let marker = new google.maps.Marker({
+                    position:position,
+                    map:map,
+                    title:"Position of "+self.props.user.name
+                });
+                marker.setPosition(position);
+                marker.setMap(map);
+                map.setCenter(position);
+            }
         });
         return (
             <div className="content-wrapper" id="mapLoader"></div>
