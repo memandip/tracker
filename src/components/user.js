@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const User = (props) => {
     return (
@@ -8,7 +9,9 @@ const User = (props) => {
               <div className="widget-user-image">
                 <img className="img-circle" src="../dist/img/avatar5.png" alt="User Avatar" />
               </div>
-              <h3 className="widget-user-username">{props.user.name}</h3>
+              <h3 className="widget-user-username">
+                <Link to={"/user/"+props.user.id}>{props.user.name}</Link>
+              </h3>
               <h5 className="widget-user-desc">User</h5>
             </div>
           </div>

@@ -35,27 +35,19 @@ class Content extends Component{
         //     let pos = {lat:position.coords.latitude, lng:position.coords.longitude}
         //     console.log("Position: ", pos);
         // });
+        let mapEl = document.getElementById('mapLoader');
+        let position = {lat: this.state.position.lat, lng: this.state.position.lng};
+        Maps.load(function(google) {
+            let map = new google.maps.Map(mapEl,{
+                zoom:10,
+                center:position
+            });
+            self.setState({map:map});
+        });
 
         userDb.on('value', function(snap){
             let user = snap.val();
             self.props.activeUser(user);
-            let mapEl = document.getElementById('mapLoader');
-            let position = {lat: user.latitude, lng: user.longitude};
-            Maps.load(function(google) {
-                let map = new google.maps.Map(mapEl,{
-                    zoom:10,
-                    center:position
-                });
-                let marker = new google.maps.Marker({
-                    position:position,
-                    map:map,
-                    title:"Position of "+user.name
-                });
-                marker.setPosition(position);
-                marker.setMap(map);
-                map.setCenter(position);
-                self.setState({map:map});
-            });
         });
     }
 
@@ -98,11 +90,11 @@ class Content extends Component{
 
     render(){
         let mapEl = document.getElementById('mapLoader');
-        let position = {lat: this.props.user.latitude, lng: this.props.user.longitude};
         let self = this;
+        let map = this.state.map;
         Maps.load(function(google) {
-            if(self.state.map !== null){
-                let map = self.state.map;
+            if(map != null && self.props.user != null){
+                let position = {lat: self.props.user.latitude, lng: self.props.user.longitude};
                 let marker = new google.maps.Marker({
                     position:position,
                     map:map,
