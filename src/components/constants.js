@@ -1,5 +1,6 @@
 export const LOGIN = 'LOGIN';
 export const ACTIVE_ADMIN = 'ACTIVE_ADMIN';
+export const UPDATE_ADMIN = 'UPDATE_ADMIN';
 export const ACTIVE_USER = 'ACTIVE_USER';
 export const FETCH_USERS = 'FETCH_USERS';
 export const FETCH_USER = 'FETCH_USER';

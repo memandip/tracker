@@ -7,9 +7,10 @@ import  Sidebar  from './sidebar.js';
 import Content from './content.js';
 import NotFoundContent from './notfoundcontent.js';
 import Login from './login.js';
-import { setloggedIn } from './components/actions/userActions';
+import { setloggedIn, activeAdmin } from './components/actions/userActions';
 import Users from './components/users';
 import firebase from './components/firebase.config';
+import Profile from './components/profile';
 
 class App extends Component{
 
@@ -21,7 +22,8 @@ class App extends Component{
     componentWillMount(){
         let self = this;
         firebase.auth().onAuthStateChanged( (user) => {
-            if(user.length > 0){
+            if(user){
+                self.props.activeAdmin(user);
                 self.props.setLoggedIn(true);
             }
         });
@@ -43,6 +45,7 @@ class App extends Component{
                     <Sidebar/>
                     <Switch>
                         <Route exact path="/" component={Users}/>
+                        <Route exact path="/profile" component={Profile}/>
                         <Route exact path={`/users`} component={Users} />
                         <Route exact path={`/user/:userId`} component={Content} />
                         <Route component={NotFoundContent} />
@@ -64,7 +67,8 @@ function mapStateToProps(state){
 
 function matchDispatchToProps(dispatch){
     return bindActionCreators({
-        setLoggedIn: setloggedIn
+        setLoggedIn: setloggedIn,
+        activeAdmin: activeAdmin
     }, dispatch);
 }
 

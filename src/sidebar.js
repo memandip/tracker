@@ -26,49 +26,79 @@ class Sidebar extends Component{
 
     render(){
         let self = this;
-        let users = $.map(self.state.users, function(user, index){
-            let icon = <i className="fa fa-dot-circle-o" aria-hidden="true"></i>;
-            if(user.connection === true){
-                icon = <i className="fa fa-dot-circle-o" aria-hidden="true" style={{color:'green'}}></i>;
+        let onlineUsers = $.map(self.state.users, function(user, index){
+            if(user.connection === 'online'){
+                let icon = <i className="fa fa-dot-circle-o" aria-hidden="true" style={{color:'green'}}></i>;
+                return (
+                    <li key={index} style={{listStyle:'none'}}>
+                        <Link to={"/user/"+index}>
+                            {icon}&nbsp;{user.name}
+                        </Link>
+                    </li>
+                );
             }
-            return (
-                <li key={index}>
+        });
+        let offlineUsers = $.map(self.state.users, function(user, index){
+            if(user.connection === 'offline'){
+                let icon = <i className="fa fa-dot-circle-o" aria-hidden="true"></i>;
+                return (
+                <li key={index} style={{listStyle:'none'}}>
                     <Link to={"/user/"+index}>
                         {icon}&nbsp;{user.name}
                     </Link>
                 </li>
             );
+            }
         });
         return (
             <aside className="main-sidebar">
                 <section className="sidebar">
-                <ul className="sidebar-menu tree" data-widget="tree">
-                    <li className="header">MAIN NAVIGATION</li>
-                    <li>
-                        <Link to="/" >
-                            <i className="fa fa-dashboard"></i>
-                            <span>Dashboard</span>
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to="/users">
-                            <i className="fa fa-users"></i>&nbsp;
-                            <span>Users</span>
-                        </Link>
-                    </li>
-                    <li className="treeview">
-                        <a href="#">
-                            <i className="fa fa-users"></i>
-                            <span>Users</span>
-                            <span className="pull-right-container">
-                            <i className="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
-                        <ul className="treeview-menu">
-                            {users}
-                        </ul>
-                    </li>
-                </ul>
+                    <div className="user-panel">
+                        <div className="pull-left image">
+                          <img src="../dist/img/avatar5.png" className="img-circle" alt="User Image" />
+                        </div>
+                        <div className="pull-left info">
+                          <p>{this.props.admin.displayName}</p>
+                          <a href="#"><i className="fa fa-circle text-success"></i> Online</a>
+                        </div>
+                    </div>
+                    <ul className="sidebar-menu tree" data-widget="tree">
+                        <li className="header">MAIN NAVIGATION</li>
+                        <li>
+                            <Link to="/" >
+                                <i className="fa fa-dashboard"></i>
+                                <span>Dashboard</span>
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/users">
+                                <i className="fa fa-users"></i>&nbsp;
+                                <span>Users</span>
+                            </Link>
+                        </li>
+                        <li className="treeview active">
+                            <a href="#">
+                                <i className="fa fa-users"></i>
+                                <span>Users</span>
+                            </a>
+                            <ul className="treeview-menu active">
+                                <li className="treeview active">
+                                     <a href="#">
+                                        <i className="fa fa-users"></i>
+                                        <span>Online Users</span>
+                                    </a>
+                                    <ul className="treeview">{onlineUsers}</ul>
+                                </li>
+                                <li className="treeview active">
+                                    <a href="#">
+                                        <i className="fa fa-users"></i>
+                                        <span>Offline Users</span>
+                                    </a>
+                                    <ul className="treeview">{offlineUsers}</ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </section>
             </aside>
         );
@@ -76,7 +106,7 @@ class Sidebar extends Component{
 }
 
 function mapStateToProps(state){
-    return {users: state.users, activeUser: state.activeUser}
+    return {users: state.users, activeUser: state.activeUser, admin:state.activeAdmin}
 }
 
 function matchDispatchToProps(dispatch){

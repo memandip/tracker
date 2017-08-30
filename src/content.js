@@ -14,7 +14,8 @@ class Content extends Component{
                 lat : 27.7089603,
                 lng : 85.3261328
             },
-            map:null
+            map:null,
+            marker:null
         };
     }
 
@@ -39,10 +40,14 @@ class Content extends Component{
         let position = {lat: this.state.position.lat, lng: this.state.position.lng};
         Maps.load(function(google) {
             let map = new google.maps.Map(mapEl,{
-                zoom:10,
+                zoom:17,
                 center:position
             });
-            self.setState({map:map});
+            let marker = new google.maps.Marker({
+                position:position,
+                map:map
+            });
+            self.setState({map:map, marker:marker});
         });
 
         userDb.on('value', function(snap){
@@ -92,19 +97,16 @@ class Content extends Component{
         let mapEl = document.getElementById('mapLoader');
         let self = this;
         let map = this.state.map;
-        Maps.load(function(google) {
-            if(map != null && self.props.user != null){
-                let position = {lat: self.props.user.latitude, lng: self.props.user.longitude};
-                let marker = new google.maps.Marker({
-                    position:position,
-                    map:map,
-                    title:"Position of "+self.props.user.name
-                });
-                marker.setPosition(position);
-                marker.setMap(map);
-                map.setCenter(position);
-            }
-        });
+        let marker = this.state.marker;
+
+        if(map != null && marker != null && self.props.user != null){
+            let position = {lat: self.props.user.latitude, lng: self.props.user.longitude};
+            marker.setPosition(position);
+            marker.setTitle('Position of '+self.props.user.name);
+            marker.setMap(map);
+            map.setCenter(position);
+        }
+
         return (
             <div className="content-wrapper" id="mapLoader"></div>
         );

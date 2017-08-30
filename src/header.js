@@ -1,8 +1,22 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
+import { setloggedIn, activeAdmin } from './components/actions/userActions';
+import firebase from 'firebase';
 
 class Header extends Component{
+
+    constructor(props){
+        super(props);
+    }
+
+    handleLogout(e){
+        e.preventDefault();
+        this.props.setLoggedIn(false);
+        this.props.activeAdmin(false);
+        firebase.auth().signOut();
+    }
 
     render(){
         return (
@@ -20,14 +34,13 @@ class Header extends Component{
                         <ul className="nav navbar-nav">
                             <li className="dropdown user user-menu">
                                 <a href="#" className="dropdown-toggle" data-toggle="dropdown">
-                                <img src="/dist/img/user2-160x160.jpg" className="user-image" alt="User Image"/>
-                                <span className="hidden-xs">Alexander Pierce</span>
+                                <img className="img-circle user-image" src="../dist/img/avatar5.png" alt="User Avatar" />
+                                <span className="hidden-xs">{this.props.admin.displayName}</span>
                                 </a>
                                 <ul className="dropdown-menu">
                                     <li className="user-header">
-                                        <img src="/dist/img/user2-160x160.jpg" className="img-circle" alt="User Image"/>
-
-                                        <p> {this.props.admin.name} - Admin</p>
+                                        <img className="img-circle user-image" src="../dist/img/avatar5.png" alt="User Avatar" />
+                                        <p> {this.props.admin.displayName} - Admin</p>
                                     </li>
 
                                     <li className="user-footer">
@@ -37,7 +50,12 @@ class Header extends Component{
                                         </Link>
                                         </div>
                                         <div className="pull-right">
-                                        <a href="#" className="btn btn-default btn-flat">Sign out</a>
+                                        <a
+                                        onClick = {this.handleLogout.bind(this)}
+                                        className="btn btn-default btn-flat">
+                                            <i className="fa fa-sign-out"></i>
+                                            &nbsp; Sign out
+                                        </a>
                                         </div>
                                     </li>
                                 </ul>
@@ -57,4 +75,11 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps)(Header);
+function matchDispatchToProps(dispatch){
+    return bindActionCreators({
+        setLoggedIn:setloggedIn,
+        activeAdmin:activeAdmin
+    }, dispatch);
+}
+
+export default connect(mapStateToProps, matchDispatchToProps)(Header);

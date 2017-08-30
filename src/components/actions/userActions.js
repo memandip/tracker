@@ -1,6 +1,7 @@
 import {
     LOGIN,
     ACTIVE_ADMIN,
+    UPDATE_ADMIN,
     ACTIVE_USER,
     FETCH_USER,
     FETCH_USERS,
@@ -15,6 +16,10 @@ export function setloggedIn(status){
 
 export function activeAdmin(admin){
     return {type:ACTIVE_ADMIN, payload:admin};
+}
+
+export function updateAdmin(admin){
+    return {type: UPDATE_ADMIN, payload:admin}
 }
 
 export function activeUser(user){
