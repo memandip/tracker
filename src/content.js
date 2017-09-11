@@ -19,23 +19,10 @@ class Content extends Component{
         };
     }
 
-    componentWillMount(){
-        // let id = this.props.match.params.userId;
-        // let userDb = firebase.database().ref().child('users').child(id);
-        // let self = this;
-        // userDb.on('value', function(snap){
-        //     self.props.activeUser(snap.val());
-        // });
-    }
-
     componentDidMount(){
         let id = this.props.match.params.userId;
         let userDb = firebase.database().ref().child('users').child(id);
         let self = this;
-        // window.navigator.geolocation.getCurrentPosition(function(position){
-        //     let pos = {lat:position.coords.latitude, lng:position.coords.longitude}
-        //     console.log("Position: ", pos);
-        // });
         let mapEl = document.getElementById('mapLoader');
         let position = {lat: this.state.position.lat, lng: this.state.position.lng};
         Maps.load(function(google) {
@@ -64,26 +51,6 @@ class Content extends Component{
         }
     }
 
-    // updateUserPosition(){
-    //     let mapEl = document.getElementById('mapLoader');
-    //     let position = {lat: this.props.user.latitude, lng: this.props.user.longitude};
-    //     let self = this;
-    //     Maps.load(function(google) {
-    //         let map = new google.maps.Map(mapEl,{
-    //             zoom:10,
-    //             center:position
-    //         });
-    //         let marker = new google.maps.Marker({
-    //             position:position,
-    //             map:map,
-    //             title:"Position of "+self.props.user.name
-    //         });
-    //         marker.setPosition(position);
-    //         marker.setMap(map);
-    //         map.setCenter(position);
-    //     });
-    // }
-
     updateUser(id){
         let userDb = firebase.database().ref().child('users').child(id);
         let self = this;
@@ -103,7 +70,6 @@ class Content extends Component{
             let position = {lat: self.props.user.latitude, lng: self.props.user.longitude};
             marker.setPosition(position);
             marker.setTitle('Position of '+self.props.user.name);
-            marker.setMap(map);
             map.setCenter(position);
         }
 

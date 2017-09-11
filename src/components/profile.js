@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 import $ from 'jquery';
+import { NotificationManager, NotificationContainer } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 class Profile extends Component{
 
@@ -29,21 +31,23 @@ class Profile extends Component{
         let self = this;
         try{
           this.props.updateAdmin(data);
-          self.setState({messages:[{successMessage:'Profile updated'}, {errorMessage:false}]});
+          NotificationManager.success('Your profile is updated.', 'Success Message');
+          // self.setState({messages:[{successMessage:'Profile updated'}, {errorMessage:false}]});
         } catch(e){
-          self.setState({messages:[{successMessage:false}, {errorMessage:'Unable to updated profile.'}]});
+          NotificationManager.error('Error message.', 'Unable to update your profile.');
+          // self.setState({messages:[{successMessage:false}, {errorMessage:'Unable to updated profile.'}]});
         }
     }
 
     render(){
-        let message = $.map( this.state.messages, (message, key)  => {
-          if(message.successMessage){
-            return <div className="callout callout-success" key={key}>{message.successMessage}</div>;
-          }
-          if(message.errorMessage){
-            return <div className="callout callout-error" key={key}>{message.errorMessage}</div>;
-          }
-        });
+        // let message = $.map( this.state.messages, (message, key)  => {
+        //   if(message.successMessage){
+        //     return <div className="callout callout-success" key={key}>{message.successMessage}</div>;
+        //   }
+        //   if(message.errorMessage){
+        //     return <div className="callout callout-error" key={key}>{message.errorMessage}</div>;
+        //   }
+        // });
         return (
             <div className="content-wrapper">
                 <section className="content-header">
@@ -53,7 +57,6 @@ class Profile extends Component{
                     <li className="active">Profile</li>
                   </ol>
                 </section>
-                {message}
                 <section className="content">
                     <div className="row">
                         <div className="col-md-3">
@@ -107,13 +110,12 @@ class Profile extends Component{
                                     </form>
                                 </div>
                               </div>
-
-
                             </div>
                           </div>
                         </div>
                     </div>
                 </section>
+                <NotificationContainer />
             </div>
         );
     }
